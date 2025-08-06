@@ -1,0 +1,162 @@
+-- Destroy existing GUI if already exists
+pcall(function() game.CoreGui:FindFirstChild("FreezeTradeGUI"):Destroy() end)
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "FreezeTradeGUI"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = game.CoreGui
+
+-- Loading Screen Setup
+local loadingFrame = Instance.new("Frame")
+loadingFrame.Size = UDim2.new(0, 300, 0, 140)
+loadingFrame.Position = UDim2.new(0.5, -150, 0.5, -70)
+loadingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+loadingFrame.BorderSizePixel = 2
+loadingFrame.Parent = gui
+
+local title = Instance.new("TextLabel", loadingFrame)
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, -35)
+title.BackgroundColor3 = Color3.fromRGB(255, 182, 193)
+title.Text = "🌱 Grow A Garden Freeze Trade 🌱"
+title.TextColor3 = Color3.fromRGB(0, 0, 0)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 16
+
+local loadingBar = Instance.new("Frame", loadingFrame)
+loadingBar.Size = UDim2.new(0, 0, 0, 10)
+loadingBar.Position = UDim2.new(0, 0, 0.6, 0)
+loadingBar.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+
+local loadingText = Instance.new("TextLabel", loadingFrame)
+loadingText.Size = UDim2.new(1, 0, 0, 25)
+loadingText.Position = UDim2.new(0, 0, 0.3, 0)
+loadingText.BackgroundTransparency = 1
+loadingText.Text = "Loading... 0%"
+loadingText.TextColor3 = Color3.fromRGB(0, 0, 0)
+loadingText.Font = Enum.Font.GothamBold
+loadingText.TextSize = 14
+
+local followNote = Instance.new("TextLabel", loadingFrame)
+followNote.Size = UDim2.new(1, 0, 0, 20)
+followNote.Position = UDim2.new(0, 0, 1, -20)
+followNote.BackgroundTransparency = 1
+followNote.Text = "FOLLOW: miszuahacks on tiktok"
+followNote.TextColor3 = Color3.fromRGB(255, 0, 0)
+followNote.Font = Enum.Font.Gotham
+followNote.TextSize = 12
+
+-- Simulate Loading
+for i = 1, 100 do
+	wait(0.1)
+	loadingText.Text = "Loading... " .. i .. "%"
+	loadingBar.Size = UDim2.new(i / 100, 0, 0, 10)
+end
+
+loadingFrame:Destroy()
+
+-- Main GUI Setup
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0, 260, 0, 290)
+main.Position = UDim2.new(0, 20, 0.5, -145)
+main.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+main.BorderSizePixel = 2
+main.Active = true
+main.Draggable = true
+main.Parent = gui
+
+local titleBar = Instance.new("TextLabel", main)
+titleBar.Size = UDim2.new(1, 0, 0, 30)
+titleBar.BackgroundColor3 = Color3.fromRGB(255, 182, 193)
+titleBar.Text = "🌱 Grow A Garden Freeze Trade 🌱"
+titleBar.TextColor3 = Color3.fromRGB(0, 0, 0)
+titleBar.Font = Enum.Font.GothamBold
+titleBar.TextSize = 14
+
+local subText = Instance.new("TextLabel", main)
+subText.Position = UDim2.new(0, 0, 0, 35)
+subText.Size = UDim2.new(1, 0, 0, 20)
+subText.BackgroundTransparency = 1
+subText.Text = "Find A Player to Freeze Trade"
+subText.Font = Enum.Font.Gotham
+subText.TextColor3 = Color3.fromRGB(0, 0, 0)
+subText.TextSize = 13
+
+local searchBox = Instance.new("TextBox", main)
+searchBox.Position = UDim2.new(0.1, 0, 0, 60)
+searchBox.Size = UDim2.new(0.8, 0, 0, 30)
+searchBox.PlaceholderText = "Search Player"
+searchBox.Text = ""
+searchBox.Font = Enum.Font.Gotham
+searchBox.TextSize = 12
+searchBox.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+
+local avatarImg = Instance.new("ImageLabel", main)
+avatarImg.Size = UDim2.new(0, 80, 0, 80)
+avatarImg.Position = UDim2.new(0.5, -40, 0, 100)
+avatarImg.BackgroundTransparency = 1
+
+local function updateAvatar(username)
+	local thumbType = Enum.ThumbnailType.HeadShot
+	local thumbSize = Enum.ThumbnailSize.Size100x100
+	local userId = game.Players:GetUserIdFromNameAsync(username)
+	local content = game.Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+	avatarImg.Image = content
+end
+
+searchBox.FocusLost:Connect(function(enterPressed)
+	if enterPressed and searchBox.Text ~= "" then
+		pcall(function()
+			updateAvatar(searchBox.Text)
+		end)
+	end
+end)
+
+-- FREEZE TRADE button
+local freezeBtn = Instance.new("TextButton", main)
+freezeBtn.Size = UDim2.new(0.6, 0, 0, 30)
+freezeBtn.Position = UDim2.new(0.2, 0, 0, 195)
+freezeBtn.Text = "❄️ FREEZE TRADE ❄️"
+freezeBtn.Font = Enum.Font.GothamBold
+freezeBtn.TextSize = 14
+freezeBtn.BackgroundColor3 = Color3.fromRGB(200, 220, 255)
+freezeBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+freezeBtn.MouseButton1Click:Connect(function()
+	freezeBtn.Text = "❄️ TRADE FROZEN ❄️"
+	freezeBtn.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+end)
+
+-- AUTO ACCEPT Toggle Button
+local autoAcceptBtn = Instance.new("TextButton", main)
+autoAcceptBtn.Size = UDim2.new(0.6, 0, 0, 30)
+autoAcceptBtn.Position = UDim2.new(0.2, 0, 0, 230)
+autoAcceptBtn.Text = "AUTO ACCEPT: OFF"
+autoAcceptBtn.Font = Enum.Font.GothamBold
+autoAcceptBtn.TextSize = 14
+autoAcceptBtn.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+autoAcceptBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+
+local isAutoAcceptOn = false
+
+autoAcceptBtn.MouseButton1Click:Connect(function()
+	isAutoAcceptOn = not isAutoAcceptOn
+	if isAutoAcceptOn then
+		autoAcceptBtn.Text = "AUTO ACCEPT: ON"
+		autoAcceptBtn.BackgroundColor3 = Color3.fromRGB(144, 238, 144)
+	else
+		autoAcceptBtn.Text = "AUTO ACCEPT: OFF"
+		autoAcceptBtn.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
+	end
+end)
+
+-- Footer Note
+local bottomNote = Instance.new("TextLabel", main)
+bottomNote.Position = UDim2.new(0, 0, 1, -20)
+bottomNote.Size = UDim2.new(1, 0, 0, 20)
+bottomNote.BackgroundTransparency = 1
+bottomNote.Text = "‼️Only Works Inside Trading Window‼️"
+bottomNote.Font = Enum.Font.GothamBold
+bottomNote.TextColor3 = Color3.fromRGB(255, 0, 0)
+bottomNote.TextSize = 12
